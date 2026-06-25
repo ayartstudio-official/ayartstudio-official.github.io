@@ -355,6 +355,94 @@
         function closeSystemModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
+        // ==================== AYART AI TUTOR LOGIC START ====================
+function sendTutorMessage() {
+    let inputField = document.getElementById("tutor-user-msg");
+    let chatLogs = document.getElementById("tutor-chat-logs");
+    let message = inputField.value.trim();
+
+    if (message === "") return;
+
+    // 1. User Message Layout
+    let userDiv = document.createElement("div");
+    userDiv.style.cssText = "background: #ff4500; padding: 10px 12px; border-radius: 8px; max-width: 85%; align-self: flex-end; color: white; line-height: 1.4; box-shadow: 0px 2px 5px rgba(0,0,0,0.2);";
+    userDiv.innerText = message;
+    chatLogs.appendChild(userDiv);
+
+    inputField.value = ""; 
+    chatLogs.scrollTop = chatLogs.scrollHeight; 
+
+    // 2. Simulated Dynamic AI Tutor Reply
+    setTimeout(() => {
+        let aiDiv = document.createElement("div");
+        aiDiv.style.cssText = "background: #1e1e24; padding: 10px 12px; border-radius: 8px; max-width: 85%; align-self: flex-start; color: white; line-height: 1.4; border-left: 3px solid #ff4500; box-shadow: 0px 2px 5px rgba(0,0,0,0.2);";
+        
+        let msgLower = message.toLowerCase();
+
+        if (msgLower.includes("shading") || msgLower.includes("shade")) {
+            aiDiv.innerHTML = "✏️ **Shading Rule:** Continuous gradient tone dene ke liye 4B/6B pencil loose hold kijiye. Smooth blend ke liye hamesha **paper blending stumps** ka use karein, ungli se smudge na karein kyunki oil marks lag jaate hain!";
+        } else if (msgLower.includes("anime") || msgLower.includes("fight")) {
+            aiDiv.innerHTML = "⚡ **Anime Master Tip:** Fight sequences me intense energy ke liye pehle ek dynamic **Line of Action** banayein. Uske baad body skeleton structures ko compress ya stretch karke extreme action poses design karein!";
+        } else if (msgLower.includes("tool") || msgLower.includes("pencil")) {
+            aiDiv.innerHTML = "🎨 **Tool Guide:** Beginners ko hamesha light HB ya 2B graphite pencil se loose structures trace karne chahiye taaki baad me lines asaani se bina mark chhode erase ho sakein.";
+        } else {
+            aiDiv.innerHTML = "🤖 Kamaal ka sawal hai! Main **AyartStudio** ke database se is art technique ko verify kar raha hoon. Tab tak aap hamare modules live check kar sakte hain!";
+        }
+
+        chatLogs.appendChild(aiDiv);
+        chatLogs.scrollTop = chatLogs.scrollHeight;
+    }, 850);
+}
+
+// Minimize & Maximize Functionality
+let isTutorMinimized = false;
+function toggleTutor() {
+    let box = document.getElementById("ai-tutor-box");
+    let logs = document.getElementById("tutor-chat-logs");
+    let inputArea = document.getElementById("tutor-input-area");
+    let btn = document.getElementById("toggle-tutor-btn");
+
+    if (!isTutorMinimized) {
+        box.style.height = "45px";
+        logs.style.display = "none";
+        inputArea.style.display = "none";
+        btn.innerText = "+";
+        isTutorMinimized = true;
+    } else {
+        box.style.height = "420px";
+        logs.style.display = "flex";
+        inputArea.style.display = "flex";
+        btn.innerText = "−";
+        isTutorMinimized = false;
+    }
+}
+// ==================== AYART AI TUTOR LOGIC END ====================
+
     </script>
+    <div id="ai-tutor-box" style="position: fixed; right: 20px; bottom: 20px; width: 330px; height: 420px; background: #111116; border: 2px solid #ff4500; border-radius: 12px; box-shadow: 0px 8px 24px rgba(0,0,0,0.6); font-family: 'Poppins', sans-serif; display: flex; flex-direction: column; z-index: 99999; overflow: hidden; transition: all 0.3s ease;">
+    
+    <div style="background: linear-gradient(135deg, #ff4500, #b33000); color: white; padding: 12px 16px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 18px;">🤖</span>
+            <div>
+                <div style="font-size: 14px; letter-spacing: 0.5px;">Ayart AI Tutor</div>
+                <div style="font-size: 10px; opacity: 0.8; font-weight: normal;">Online | Ready to Teach</div>
+            </div>
+        </div>
+        <button onclick="toggleTutor()" id="toggle-tutor-btn" style="background: none; border: none; color: white; font-size: 16px; cursor: pointer; outline: none;">−</button>
+    </div>
+
+    <div id="tutor-chat-logs" style="flex: 1; padding: 15px; overflow-y: auto; color: #fff; font-size: 13.5px; background: #0b0b0e; display: flex; flex-direction: column; gap: 10px;">
+        <div style="background: #1e1e24; padding: 10px 12px; border-radius: 8px; max-width: 85%; align-self: flex-start; line-height: 1.4; border-left: 3px solid #ff4500;">
+            Hey Arnav! Main aapka **Ayart AI Tutor** hoon. 👋 <br><br>
+            Aapko Anime Art, Shading, ya Drawing basics me se aaj kya sikhna hai? Kuch bhi poochiye!
+        </div>
+    </div>
+
+    <div id="tutor-input-area" style="display: flex; background: #16161c; border-top: 1px solid #222; padding: 8px;">
+        <input type="text" id="tutor-user-msg" placeholder="Ask about shading, anime lines..." style="flex: 1; padding: 10px 12px; background: #22222b; color: white; border: 1px solid #333; border-radius: 6px; outline: none; font-size: 13px;" onkeypress="if(event.key === 'Enter') sendTutorMessage()">
+        <button onclick="sendTutorMessage()" style="background: #ff4500; color: white; border: none; padding: 0 16px; margin-left: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; transition: background 0.2s;" onmouseover="this.style.background='#d43d00'" onmouseout="this.style.background='#ff4500'">Send</button>
+    </div>
+    </div>
 </body>
 </html>
